@@ -107,28 +107,35 @@ const DeckChooser = () => {
     );
   }
   return (
-    <div id="deckchooser">
-      {Decks.map((deck: decklistdefinition) => {
-        const player = CreateDefaultPlayer(PlayerID);
-        player.name = deck.deckname;
-        return (
-          <div className="verticaldeckslice">
-            <div className="selected">
-              {DbPlayer.selecteddeck == deck.deckid
-                ? selected
-                : notselected(deck.deckid)}
+    <div>
+      <div id="deckchooser">
+        {Decks.map((deck: decklistdefinition) => {
+          const player = CreateDefaultPlayer(PlayerID);
+          player.name = deck.deckname;
+          return (
+            <div className="verticaldeckslice">
+              <div className="selected">
+                {DbPlayer.selecteddeck == deck.deckid
+                  ? selected
+                  : notselected(deck.deckid)}
+              </div>
+              <div className="deckvis" onClick={() => gotodeck(deck.deckid)}>
+                {CreateDeckVisual(player, deck, () => gotodeck(deck.deckid))}
+              </div>
             </div>
-            <div className="deckvis" onClick={() => gotodeck(deck.deckid)}>
-              {CreateDeckVisual(player, deck, () => gotodeck(deck.deckid))}
-            </div>
-          </div>
-        );
-      })}{" "}
-      <div className="verticaldeckslice">
-        <div className="selected"></div>
-        {emptydeckvisual}
+          );
+        })}{" "}
+        <div className="verticaldeckslice">
+          <div className="selected"></div>
+          {emptydeckvisual}
+        </div>
+      </div>
+      <div className="deckBackToHome">
+        <a onClick={() => nav("/home")}>Back to home</a>
       </div>
     </div>
+
+    
   );
 };
 

@@ -100,7 +100,7 @@ function Home() {
           <div className="play-description">Manage your decks.</div>
         </Link>
       </div>
-      <SessionHandler />;
+      <SessionHandler />
     </div>
   );
 }
