@@ -126,8 +126,8 @@ function CardScan(
     G.players[slotplayer].hand = hand.filter((crd, i) => !crd.obliterated);
   }
   for (const slotplayer in G.playerData) {
-    const grave: CMCCard[] = G.playerData[slotplayer].grave;
-    G.playerData[slotplayer].grave = grave.filter((crd, i) => !crd.obliterated);
+    const grave: CMCCard[] = G.playerData[slotplayer].graveyard;
+    G.playerData[slotplayer].graveyard = grave.filter((crd, i) => !crd.obliterated);
   }
 }
 
