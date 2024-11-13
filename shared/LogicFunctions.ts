@@ -21,7 +21,7 @@ import {
   Random,
   RandomAPI,
 } from "boardgame.io/dist/types/src/plugins/random/random";
-import { GetActivePlayer, GetActiveStage } from "./Util";
+import { GetActivePlayer, GetActiveStage, OtherPlayer } from "./Util";
 import { CanActivateAbility, TriggerCard, TriggerNames } from "./Abilities";
 import { EventsAPI } from "boardgame.io/dist/types/src/plugins/plugin-events";
 import { AbilityFunctionArgs } from "./CardFunctions";
@@ -602,8 +602,8 @@ function CanClickCard(
         return false;
       }
       const monster = card as CMCMonsterCard;
-      if (monster.dizzy) {
-        // cant attack when dizzy
+      if (monster.dizzy || monster.destroyed) {
+        // cant attack when dizzy or destroyed
         return false;
       }
       // is the monster already attacking?
@@ -732,7 +732,7 @@ function CheckState(G: CMCGameState) {
     const player: CMCPlayer = G.playerData[playerid];
     if (player.resources.intrinsic.health <= 0) {
       console.log("player lost due to health");
-      G.loser = playerid;
+      G.winner = OtherPlayer(playerid);
     }
     // set player deck values for visual reasons
     player.currentDeck = G.secret.decks[playerid].length;

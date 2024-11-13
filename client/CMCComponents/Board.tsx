@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState, MouseEvent, useEffect } from "react";
 import CMCCardVisual from "./Card";
-import { CMCGameState } from "../../shared/CardmasterGame";
+import { CMCGameState, CMCProps } from "../../shared/CardmasterGame";
 import type { BoardProps } from "boardgame.io/react";
 import { CanClickCard, OwnerOf } from "../../shared/LogicFunctions";
 import { CardType, ClickType } from "../../shared/Constants";
@@ -12,21 +12,11 @@ import { icons } from "./Icons";
 import useMousePosition from "./UseMousePosition";
 import { DbFullDeck } from "../../server/DbTypes";
 import Chat from "./Chat";
-
-interface CMCProps extends BoardProps<CMCGameState> {
-  // Additional custom properties for your component
-
-  goesfirst?: string;
-  dbplayerid?: string;
-  cpuopponent?: string;
-  showChat?: boolean;
-}
+import GameOver from "./GameOver";
 
 export function CMCBoard(props: CMCProps) {
   const [GameStarted, setGameStarted] = useState(false);
   const [Waiting, setWaiting] = useState(false);
-  const [winner, setWinner] = useState("");
-  const [rewards, setRewards] = useState([""]);
   const [dbid, setdbid] = useState("");
   const mousePosition = useMousePosition();
   if (props.G.wait == false && !GameStarted) {
@@ -170,49 +160,19 @@ export function CMCBoard(props: CMCProps) {
   }
 
   let otherPlayer = you == "0" ? "1" : "0";
+  
 
-  if (props.ctx.gameover) {
-    if (props.ctx.gameover.winner) {
-      setWinner(props.ctx.gameover.winner);
-      if (props.ctx.gameover.winner == you) {
-        //display win
-      }
-    } else {
-      // display loss
-    }
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        playeriD: dbid,
-        victory: {
-          type: "",
-          victory: props.ctx.gameover.winner == you,
-        },
-      }),
-    };
-    fetch("/api/manage/mats/give/", requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.letterawards) {
-          setRewards(data.letterrewards);
-        }
-        if (data.cardawards) {
-          // todo
-        }
-      });
-
+  if (props.ctx.gameover && props.ctx.gameover.winner) {
     return (
-      <div className="winner">
-        {winner == you ? "You won :)" : "you lost :("}
-        <div className="rewards">
-          REWARDS:
-          {rewards.map((reward) => {
-            return <div className="reward">{icons["letter" + reward]}</div>;
-          })}
-        </div>
+    <div> 
+    <GameOver
+        props = {props}
+        winner = {props.ctx.gameover.winner}
+        player = {you}
+        dbid = {dbid}
+      />
       </div>
-    );
+    )
   } else {
     return (
       <div className="cmcboard">

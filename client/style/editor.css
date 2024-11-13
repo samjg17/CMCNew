@@ -455,3 +455,11 @@
 .enemyselector .enemyportrait.uncompleted {
   transform: scale(1.2);
 }
+
+.deckBackToHome {
+  text-align: center;
+}
+
+a.deckBackToHome {
+  display: block;
+}

@@ -2,6 +2,7 @@ import { INVALID_MOVE } from "boardgame.io/core";
 import type { Ctx, Game, Move } from "boardgame.io";
 import { Stage, TurnOrder } from "boardgame.io/core";
 import premadeDecks from "../shared/data/premade.json";
+import type { BoardProps } from "boardgame.io/react";
 import {
   CMCCard,
   CMCLocationCard,
@@ -106,7 +107,7 @@ export interface CMCGameState {
   activeAbility?: Ability;
   activeCard?: CMCCard;
   returnStage: Stages[];
-  loser?: string;
+  winner?: string;
   location: CMCLocationCard;
   didinitialsetup: boolean;
   combat?: CMCCombat;
@@ -115,6 +116,15 @@ export interface CMCGameState {
   lastAbilityStack: StackedAbility[];
   wait: boolean;
   gamemode: GameMode;
+}
+
+export interface CMCProps extends BoardProps<CMCGameState> {
+  // Additional custom properties for your component
+
+  goesfirst?: string;
+  dbplayerid?: string;
+  cpuopponent?: string;
+  showChat?: boolean;
 }
 
 // Initial game state
@@ -417,7 +427,7 @@ export const CardmasterConflict: Game<CMCGameState> = {
           );
           if (!okay) {
             console.log("player lost due to draw out during inital setup");
-            G.loser = playerno;
+            G.winner = OtherPlayer(playerno);
           }
           PlayerAddResource(playerno, player.persona.startingResource, G);
         }
@@ -462,7 +472,7 @@ export const CardmasterConflict: Game<CMCGameState> = {
   },
   endIf: ({ G, ctx }) => {
     if (IsVictory(G)) {
-      return { winner: ctx.currentPlayer };
+      return { winner: G.winner };
     }
     if (IsDraw(G)) {
       return { draw: true };
@@ -472,10 +482,10 @@ export const CardmasterConflict: Game<CMCGameState> = {
   ai: ai,
 };
 
-// something has set the loser flag.
+// something has set the winner flag.
 function IsVictory(G: CMCGameState) {
-  if (G.loser) {
-    return { winner: OtherPlayer(G.loser) };
+  if (G.winner) {
+    return true;
   }
   return false;
 }
