@@ -6,6 +6,8 @@ import { icons } from "../CMCComponents/Icons";
 import { CreateBasicCard, GetCardPrototype } from "../../shared/CMCCard";
 import CMCCardVisual from "../CMCComponents/Card";
 import { CreateDefaultPlayer } from "../../shared/Player";
+import crafting from "../../shared/data/crafting.json";
+
 
 const Craft = () => {
   const emptym: DbCraftingMats = {
@@ -27,6 +29,7 @@ const Craft = () => {
   const [Card, setCard] = useState(CreateBasicCard());
   const [CardsGiven, setCardsGiven] = useState(["empty"]);
   const [Known, setKnown] = useState([""]);
+
 
   useEffect(() => {
     fetch("/api/manage/player/getsession")
@@ -164,41 +167,70 @@ const Craft = () => {
       })}
     </div>
   );
-  const letterbox = (
-    <div className="letterbox">
-      {Mats.mats.map((mat) => {
-        return (
-          <div
-            key={mat.letter}
-            className="letter"
-            style={mat.amount > 0 ? { display: "block" } : { display: "none" }}
-          >
-            <button
-              className="selectletter"
-              onClick={() => {
-                addLetter(mat.letter);
-              }}
-            >
-              <div className="lettericon">
-                {icons["letter" + mat.letter.toLowerCase()]}
-              </div>
-              <div className="amount">{mat.amount}</div>
-            </button>
-          </div>
-        );
-      })}
-      <div key="cauldron" className="letter">
-        <button
-          className="selectletter"
-          onClick={() => {
-            craft();
-          }}
+  const letterList = Object.keys(crafting.rewardrates);
+
+  // Combine all available crafting letters with letters the player has into a single list
+  const combinedMats = letterList.map((letter) => {
+    const mat = Mats.mats.find((m) => m.letter === letter);
+    return {
+      letter: letter,
+      amount: mat ? mat.amount : 0,
+    };
+  });
+
+  const LetterBox = ({ mats, onClick }) => (
+    <>
+      {mats.map((mat) => (
+        <div
+          key={mat.letter}
+          className="letter"
         >
-          <div className="lettericon">{icons.cauldron}</div>
-          <div className="amount">Craft!</div>
-        </button>
-      </div>
-    </div>
+          <button
+            className="selectletter"
+            onClick={() => onClick(mat.letter)}
+            style={mat.amount > 0 ? { color: "#0f9015" } : { color: "darkgrey" }}
+            disabled={mat.amount <= 0}
+          >
+            <div className="lettericon">
+              {icons["letter" + mat.letter.toLowerCase()]}
+            </div>
+            <div className="amount">{mat.amount}</div>
+          </button>
+        </div>
+      ))}
+    </>
+  );
+  
+  const letterbox = (
+    <>
+      {(() => {
+        //Split the list of mats in half to render 2 rows
+        //Done like this to account for more letters being added in the future
+        const halfwayIndex = Math.ceil(combinedMats.length / 2);
+        const firstHalf = combinedMats.slice(0, halfwayIndex);
+        const secondHalf = combinedMats.slice(halfwayIndex);
+  
+        return (
+          <>
+          <div className="letterbox">
+            <LetterBox mats={firstHalf} onClick={addLetter} />
+            </div>
+            <div className="letterbox">
+            <LetterBox mats={secondHalf} onClick={addLetter} />
+              <div key="cauldron" className="letter">
+                <button
+                  className="selectletter"
+                  onClick={craft}
+                >
+                  <div className="lettericon">{icons.cauldron}</div>
+                  <div className="amount">Craft!</div>
+                </button>
+              </div>
+            </div>
+          </>
+        );
+      })()}
+    </>
   );
 
   return (

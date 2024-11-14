@@ -340,12 +340,14 @@
 
 .CraftingInterface .letters {
 }
-
 .CraftingInterface .letterbox {
-  border: 2px solid aqua;
   border-radius: 2em;
   display: flex;
   height: 6em;
+}
+
+.selectletter:disabled {
+  pointer-events: none;
 }
 
 .CraftingInterface .letterbox .selectletter {
