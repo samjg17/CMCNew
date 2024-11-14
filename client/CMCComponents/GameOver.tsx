@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { icons } from "./Icons";
-import { Link } from "react-router-dom";
 
 function GameOver({ props, winner, player, dbid }) {
     const [rewards, setRewards] = useState<any[]>([]);
@@ -33,15 +32,22 @@ function GameOver({ props, winner, player, dbid }) {
 
     return (
         <div className="winner">
-            {winner == player ? "You won :)" : "you lost :("}
+            {winner == player ? "You won :)" : "You lost :("}
             <div className="rewards">
                 REWARDS:
-                {rewards.map((reward, index) => {
-                    return <div key={index} className="reward">{icons["letter" + reward.toLowerCase()]}</div>;
-                })}
+                <br />
+                {rewards.map((reward, index) => (
+                    <div
+                        key={index}
+                        className="reward"
+                        style={{ animationDelay: `${index * 0.2}s` }}
+                    >
+                        {icons["letter" + reward.toLowerCase()]}
+                    </div>
+                ))}
             </div>
             <div>
-                <Link reloadDocument to="/home">Back to home</Link>
+                <a href="/home">Back to home</a>
             </div>
         </div>
     );
