@@ -7,6 +7,7 @@ import { CreateBasicCard, GetCardPrototype } from "../../shared/CMCCard";
 import CMCCardVisual from "../CMCComponents/Card";
 import { CreateDefaultPlayer } from "../../shared/Player";
 import crafting from "../../shared/data/crafting.json";
+import { Link } from "react-router-dom";
 
 
 const Craft = () => {
@@ -239,6 +240,7 @@ const Craft = () => {
       <div className="entrybox">{entrybox}</div>
       <div className="letters">{letterbox}</div>
       <div className="known">{known}</div>
+      <Link style={{"padding": "10px"}} to="/home">Back to home</Link>
     </div>
   );
 };
