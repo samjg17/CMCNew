@@ -138,7 +138,7 @@ Manage.get("/mats/craft/:playerid/:letters", (ctx, next) => {
       if (cardstogive.includes(ownedcard.cardid)) {
         // if the card is a persona,
         if (GetCardPrototype(ownedcard.cardid).type == CardType.PERSONA) {
-          cardstogive.splice(cardstogive.indexof(ownedcard.cardid));
+          cardstogive.splice(cardstogive.indexOf(ownedcard.cardid));
         }
       }
     }
@@ -206,19 +206,19 @@ Manage.get("/mats/craft/:playerid/:letters", (ctx, next) => {
       if (GetCardPrototype(ownedcard.cardid).type == CardType.PERSONA) {
         if (packsetting.common.includes(ownedcard.cardid)) {
           packsetting.common.splice(
-            packsetting.common.indexof(ownedcard.cardid),
+            packsetting.common.indexOf(ownedcard.cardid),
             1
           );
         }
         if (packsetting.uncommon.includes(ownedcard.cardid)) {
           packsetting.uncommon.splice(
-            packsetting.uncommon.indexof(ownedcard.cardid),
+            packsetting.uncommon.indexOf(ownedcard.cardid),
             1
           );
         }
         if (packsetting.rare.includes(ownedcard.cardid)) {
           packsetting.rare.splice(
-            packsetting.rare.indexof(ownedcard.cardid),
+            packsetting.rare.indexOf(ownedcard.cardid),
             1
           );
         }
@@ -266,7 +266,7 @@ Manage.get("/mats/craft/:playerid/:letters", (ctx, next) => {
 });
 Manage.post("/mats/give", bodyParser(), (ctx, next) => {
   let victoryinfo = ctx.request.body as {
-    id: PlayerID;
+    playerid: PlayerID;
     victory: { type: string; victory: boolean };
   };
   // figure out rewards
@@ -293,7 +293,7 @@ Manage.post("/mats/give", bodyParser(), (ctx, next) => {
     cardrewards.push(victoryinfo.victory.type);
   }
   const newmats: DbCraftingMats = {
-    playerid: victoryinfo.id,
+    playerid: victoryinfo.playerid,
     mats: [],
   };
 
@@ -308,7 +308,7 @@ Manage.post("/mats/give", bodyParser(), (ctx, next) => {
     }
     if (!found) {
       const newmat: DbCraftingMat = {
-        playerid: victoryinfo.id,
+        playerid: victoryinfo.playerid,
         letter: letter,
         amount: 1,
       };
