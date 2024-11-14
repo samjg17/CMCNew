@@ -9,16 +9,15 @@ import { Ability, StackedAbility } from "../../shared/Abilities";
 import { OtherPlayer } from "../../shared/Util";
 import { FilteredMetadata } from "boardgame.io";
 import { icons } from "./Icons";
-import useMousePosition from "./UseMousePosition";
 import { DbFullDeck } from "../../server/DbTypes";
 import Chat from "./Chat";
 import GameOver from "./GameOver";
+import HoverBigCard from "./HoverBigCard";
 
 export function CMCBoard(props: CMCProps) {
   const [GameStarted, setGameStarted] = useState(false);
   const [Waiting, setWaiting] = useState(false);
   const [dbid, setdbid] = useState("");
-  const mousePosition = useMousePosition();
   if (props.G.wait == false && !GameStarted) {
     setGameStarted(true);
   }
@@ -40,7 +39,7 @@ export function CMCBoard(props: CMCProps) {
     }
   } else {
     // set up vs cpu game
-
+    
     // load your deck and send as a move
     useEffect(() => {
       fetch("/api/manage/player/getbyid/" + props.dbplayerid)
@@ -59,6 +58,7 @@ export function CMCBoard(props: CMCProps) {
                 fulldeck,
                 dbplayer
               );
+              setdbid(props.dbplayerid || "0");
               setGameStarted(true);
             });
         });
@@ -481,26 +481,11 @@ export function CMCBoard(props: CMCProps) {
             )}
           </div>
         </div>
-        <div
-          className="hoverbigcard"
-          id="hoverbigcard"
-          style={{
-            left: mousePosition.x ? mousePosition.x + 10 : 0,
-            top: mousePosition.y ? mousePosition.y + 10 : 0,
-          }}
-        >
-          <CMCCardVisual
-            G={props.G}
-            ctx={props.ctx}
-            big={true}
-            activeCard={false}
-            player={props.G.playerData[OwnerOf(hoverCard, props.G)]}
-            card={hoverCard}
-            doClick={() => {}}
-            canClick={false}
-            key={"player" + otherPlayer}
-          />
-        </div>
+        <HoverBigCard 
+          props = {props}
+          hoverCard = {hoverCard}
+          otherPlayer = {otherPlayer}
+           />
         <div className={"chatwindow"}>
           {props.showChat ? (
             <Chat

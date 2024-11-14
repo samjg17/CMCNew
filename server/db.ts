@@ -54,21 +54,35 @@ function GetMats(playerID: string): DbCraftingMats | undefined {
 
 function GiveMats(newmats: DbCraftingMats): DbCraftingMats | undefined {
   const mats = GetMats(newmats.playerid);
+  console.log(mats);
+  console.log(newmats);
+  // Map to store the results by 'letter'. Using a map to keep this O(1)
+  const mergedMap = new Map<string, DbCraftingMat>(); 
+
   if (mats != undefined) {
-    for (const mat of mats.mats) {
-      let updated: boolean = false;
-      for (const newmat of newmats.mats) {
-        if ((newmat.letter = mat.letter)) {
-          newmat.amount = newmat.amount + newmat.amount;
-          updated = true;
-          break;
+    // Function to process each array and combine amounts by 'letter'
+    const mergeArray = (array: DbCraftingMat[]) => {
+      for (const item of array) {
+        if (mergedMap.has(item.letter)) {
+          // If the letter exists, add the amount to the existing entry
+          mergedMap.get(item.letter)!.amount += item.amount;
+        } else {
+          // If the letter does not exist, add a new entry
+          mergedMap.set(item.letter, { ...item });
         }
       }
-      if (updated) continue;
+    };
+    mergeArray(mats.mats);
+    mergeArray(newmats.mats);
+  };
+    console.log(mergedMap);
+    
+    const mergedMats: DbCraftingMats = {
+    playerid: newmats.playerid,
+    mats: Array.from(mergedMap.values())
     }
-  }
-  SetMats(newmats);
-  return newmats;
+  SetMats(mergedMats);
+  return mergedMats;
 }
 
 function SetDeck(playerid: string, deckid: string) {
