@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import "../style/login.css";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import qrcode from "qrcode";
@@ -54,17 +54,22 @@ function CreatePlayer() {
     </div>
   );
   const initialform = (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Account Creation
-        <br />
-        name:
-        <input type="text" name="nameInput" />
-        <br />
-        deck: <input type="text" value="debug" name="deckInput" disabled />
-      </label>
-      <input type="submit" value="Submit" />
-    </form>
+  <div className="login">
+    <div className="loginContainer">
+      <div className="loginHeader">Sign Up</div>
+      <form onSubmit={handleSubmit} className="loginForm">
+        <div className="formGroup">
+          <label htmlFor="nameInput">Name:</label>
+          <input type="text" name="nameInput" id="nameInput" />
+        </div>
+        <div className="formGroup">
+          <label htmlFor="deckInput">Deck:</label>
+          <input type="text" name="deckInput" id="deckInput" value="debug" disabled />
+        </div>
+        <input type="submit" value="Submit" className="submitBtn" />
+      </form>
+    </div>
+  </div>
   );
   return (
     <div className="App">

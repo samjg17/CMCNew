@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import "../style/login.css";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import qrcode from "qrcode";
@@ -31,21 +31,28 @@ function Default() {
   }
 
   return (
-    <div className="App">
-      <Link to="/player/create">Create new</Link>
-      <form onSubmit={handleSubmit}>
-        <label>
-          your name:
-          <input type="text" name="username" />
-        </label>
-        <label>
-          authenticator code:
-          <input type="text" name="authcode" />
-        </label>
-        <input type="submit" value="Submit" />
+  <div className="login">
+    <div className="loginContainer">
+      <div className="loginHeader">Login</div>
+      <Link to="/player/create" className="createLink">
+        Create New Account
+      </Link>
+      <form onSubmit={handleSubmit} className="loginForm">
+        <div className="formGroup">
+          <label htmlFor="username">Your Name:</label>
+          <input type="text" name="username" id="username" />
+        </div>
+        <div className="formGroup">
+          <label htmlFor="authcode">Authenticator Code:</label>
+          <input type="text" name="authcode" id="authcode" />
+        </div>
+        <input type="submit" value="Submit" className="submitBtn" />
       </form>
     </div>
+  </div>
   );
 }
+
+
 
 export default Default;
