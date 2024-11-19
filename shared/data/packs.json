@@ -1,7 +1,7 @@
 {
   "packs": {
     "base": {
-      "rare": ["debugpersona", "farisin"],
+      "rare": ["debugpersona", "farisin", "slimefriend"],
       "common": ["debugslime", "debuggen"],
       "uncommon": ["debugspell", "debugloc"]
     }

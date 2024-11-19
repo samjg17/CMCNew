@@ -231,24 +231,24 @@ Manage.get("/mats/craft/:playerid/:letters", (ctx, next) => {
     const rare = totalnumber - Math.floor(uncommon / 2) - commons;
     for (let i = 0; i < commons; i++) {
       const randomElement =
-        packs.packs.base.common[
-          Math.floor(Math.random() * packs.packs.base.common.length)
+        packsetting.common[
+          Math.floor(Math.random() * packsetting.common.length)
         ];
       AddCard(owned, randomElement, playerid);
       cardsgiven.push(randomElement);
     }
     for (let i = 0; i < uncommon; i++) {
       const randomElement =
-        packs.packs.base.uncommon[
-          Math.floor(Math.random() * packs.packs.base.uncommon.length)
+        packsetting.uncommon[
+          Math.floor(Math.random() * packsetting.uncommon.length)
         ];
       AddCard(owned, randomElement, playerid);
       cardsgiven.push(randomElement);
     }
     for (let i = 0; i < rare; i++) {
       const randomElement =
-        packs.packs.base.rare[
-          Math.floor(Math.random() * packs.packs.base.rare.length)
+        packsetting.rare[
+          Math.floor(Math.random() * packsetting.rare.length)
         ];
       AddCard(owned, randomElement, playerid);
       cardsgiven.push(randomElement);
